@@ -24,7 +24,25 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        var elfFoodItems = input
+        val elfCalorieList = mutableListOf<Int>()
+
+        while (elfFoodItems.isNotEmpty()) {
+            val endOfItemsIndex = elfFoodItems.indexOfFirst { it.isBlank() }
+
+            if (endOfItemsIndex != -1) {
+                elfCalorieList.add(
+                    elfFoodItems.takeWhile { it.isNotEmpty() }
+                        .sumOf { it.toInt() }
+                )
+                elfFoodItems = elfFoodItems.subList(endOfItemsIndex + 1, elfFoodItems.size)
+            } else {
+                elfCalorieList.add(elfFoodItems.sumOf { it.toInt() })
+                elfFoodItems = listOf()
+            }
+        }
+
+        return elfCalorieList.sortedDescending().take(3).sum()
     }
 
     // test if implementation meets criteria from the description, like:
@@ -33,5 +51,5 @@ fun main() {
 
     val input = readInput("Day01")
     part1(input).println()
-//    part2(input).println()
+    part2(input).println()
 }
