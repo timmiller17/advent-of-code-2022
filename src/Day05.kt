@@ -19,12 +19,10 @@ fun main() {
         }
 
         for (row in crateIds.reversed()) {
-            var stackIndex = 0
-            for (crateId in row) {
+            for ((stackIndex, crateId) in row.withIndex()) {
                 if (crateId != " ") {
                     stacks[stackIndex].addLast(crateId)
                 }
-                stackIndex++
             }
         }
 
