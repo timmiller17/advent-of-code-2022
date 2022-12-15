@@ -1,14 +1,13 @@
 fun main() {
     fun part1(input: List<String>): String {
-        val rows = input
 
-        val indexOfColumnRow = rows.indexOfFirst { it.contains("1") }
+        val indexOfColumnRow = input.indexOfFirst { it.contains("1") }
 
-        val numberOfStacks = rows[indexOfColumnRow].trim().takeLast(1).toInt()
+        val numberOfStacks = input[indexOfColumnRow].trim().takeLast(1).toInt()
 
         val crateIds = mutableListOf<List<String>>()
 
-        for (row in rows.take(indexOfColumnRow)) {
+        for (row in input.take(indexOfColumnRow)) {
             val crates = row.chunked(4).map { it.substring(1, 2) }
             crateIds += crates
         }
@@ -29,7 +28,7 @@ fun main() {
             }
         }
 
-        val instructions = rows.subList(indexOfColumnRow + 2, rows.size)
+        val instructions = input.subList(indexOfColumnRow + 2, input.size)
 
         for (instruction in instructions) {
             for (move in 1..instruction.quantity()) {
