@@ -75,13 +75,29 @@ fun main() {
 
         for (instruction in instructions) {
 
-            val cratesToMove = mutableListOf<String>()
-            for (move in 1..instruction.quantity()) {
-                cratesToMove += stacks[instruction.fromStack() - 1].removeLast()
-            }
 
-            for (crate in cratesToMove.reversed()) {
+            // original version also works but loops through moved crates twice
+//            val cratesToMove = mutableListOf<String>()
+//            for (move in 1..instruction.quantity()) {
+//                cratesToMove += stacks[instruction.fromStack() - 1].removeLast()
+//            }
+//
+//            for (crate in cratesToMove.reversed()) {
+//                stacks[instruction.toStack() - 1].addLast(crate)
+//            }
+
+
+            // this version is more efficient because it only loops through once
+            // to preserve the order of a multi crate move, it removes the bottom crate in the move first
+            // and places it on the new stack
+            // I had to do it this way because while you can use takeLast(n) to get the group of
+            // several crates, that does not remove them from the originating stack.
+            var moveQuantity = instruction.quantity()
+            while (moveQuantity > 0) {
+                val sizeOfStack = stacks[instruction.fromStack() - 1].size
+                val crate: String = stacks[instruction.fromStack() - 1].removeAt(sizeOfStack - moveQuantity)
                 stacks[instruction.toStack() - 1].addLast(crate)
+                moveQuantity--
             }
         }
 
