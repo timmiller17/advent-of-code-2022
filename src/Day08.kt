@@ -66,50 +66,13 @@ fun main() {
                     treesToBottom += rows[i][column].toInt()
                 }
 
-                var viewingDistance = 0
-                for (tree in treesToLeft) {
-                    if (tree < treeHeight) {
-                        viewingDistance++
-                    } else {
-                        viewingDistance++
-                        break
-                    }
-                }
-                val leftViewingDistance = viewingDistance
+                // experimenting with which reads better, I think I like treeHeight.viewingDistanceTo(treesToLeft) better
+//                val leftViewingDistance = treesToLeft.viewingDistanceFor(treeHeight)
+                val rightViewingDistance = treesToRight.viewingDistanceFor(treeHeight)
+                val topViewingDistance = treesToTop.viewingDistanceFor(treeHeight)
+                val bottomViewingDistance = treesToBottom.viewingDistanceFor(treeHeight)
 
-                viewingDistance = 0
-                for (tree in treesToRight) {
-                    if (tree < treeHeight) {
-                        viewingDistance++
-                    } else {
-                        viewingDistance++
-                        break
-                    }
-                }
-                val rightViewingDistance = viewingDistance
-
-                viewingDistance = 0
-                for (tree in treesToTop) {
-                    if (tree < treeHeight) {
-                        viewingDistance++
-                    } else {
-                        viewingDistance++
-                        break
-                    }
-                }
-                val topViewingDistance = viewingDistance
-
-                viewingDistance = 0
-                for (tree in treesToBottom) {
-                    if (tree < treeHeight) {
-                        viewingDistance++
-                    } else {
-                        viewingDistance++
-                        break
-                    }
-                }
-                val bottomViewingDistance = viewingDistance
-
+                val leftViewingDistance = treeHeight.viewingDistanceTo(treesToLeft)
 
                 val scenicScore = leftViewingDistance * rightViewingDistance * topViewingDistance * bottomViewingDistance
 
@@ -133,4 +96,30 @@ fun main() {
 
 fun Int.visibleThrough(list: List<Int>): Boolean {
     return this > list.max()
+}
+
+fun List<Int>.viewingDistanceFor(treeHeight: Int): Int {
+    var viewingDistance = 0
+    for (tree in this) {
+        if (tree < treeHeight) {
+            viewingDistance++
+        } else {
+            viewingDistance++
+            break
+        }
+    }
+    return viewingDistance
+}
+
+fun Int.viewingDistanceTo(trees: List<Int>): Int {
+    var viewingDistance = 0
+    for (tree in trees) {
+        if (tree < this) {
+            viewingDistance++
+        } else {
+            viewingDistance++
+            break
+        }
+    }
+    return viewingDistance
 }
