@@ -10,7 +10,7 @@ fun main() {
         outerLoop@ for (column in 1..rows[0].size - 2) {
             for (row in 1..rows.size - 2) {
                 val treeHeight = rows[row][column].toInt()
-                
+
                 val treesToLeft = rows[row].subList(0, column)
                 if (treeHeight.visibleThrough(treesToLeft.map { it.toInt() })) {
                     visibleTreeCount++
@@ -47,12 +47,84 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+
+        var maxScenicScore = 0
+        val rows = input.map { it.chunked(1) }
+
+        for (column in 1..rows[0].size - 2) {
+            for (row in 1..rows.size - 2) {
+                val treeHeight = rows[row][column].toInt()
+
+                val treesToLeft = rows[row].subList(0, column).reversed().map { it.toInt() }
+                val treesToRight = rows[row].subList(column + 1, rows[row].size).map { it.toInt() }
+                val treesToTop = mutableListOf<Int>()
+                for (i in row - 1 downTo 0) {
+                    treesToTop += rows[i][column].toInt()
+                }
+                val treesToBottom = mutableListOf<Int>()
+                for (i in (row + 1) until rows.size) {
+                    treesToBottom += rows[i][column].toInt()
+                }
+
+                var viewingDistance = 0
+                for (tree in treesToLeft) {
+                    if (tree < treeHeight) {
+                        viewingDistance++
+                    } else {
+                        viewingDistance++
+                        break
+                    }
+                }
+                val leftViewingDistance = viewingDistance
+
+                viewingDistance = 0
+                for (tree in treesToRight) {
+                    if (tree < treeHeight) {
+                        viewingDistance++
+                    } else {
+                        viewingDistance++
+                        break
+                    }
+                }
+                val rightViewingDistance = viewingDistance
+
+                viewingDistance = 0
+                for (tree in treesToTop) {
+                    if (tree < treeHeight) {
+                        viewingDistance++
+                    } else {
+                        viewingDistance++
+                        break
+                    }
+                }
+                val topViewingDistance = viewingDistance
+
+                viewingDistance = 0
+                for (tree in treesToBottom) {
+                    if (tree < treeHeight) {
+                        viewingDistance++
+                    } else {
+                        viewingDistance++
+                        break
+                    }
+                }
+                val bottomViewingDistance = viewingDistance
+
+
+                val scenicScore = leftViewingDistance * rightViewingDistance * topViewingDistance * bottomViewingDistance
+
+                if (scenicScore > maxScenicScore) {
+                    maxScenicScore = scenicScore
+                }
+            }
+        }
+        return maxScenicScore
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day08_test")
     check(part1(testInput) == 21)
+    check(part2(testInput) == 8)
 
     val input = readInput("Day08")
     part1(input).println()
