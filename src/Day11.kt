@@ -1,3 +1,5 @@
+import java.math.BigInteger
+
 fun main() {
     fun part1Test(input: List<String>): Int {
         val monkeyData = input.chunked(7)
@@ -151,29 +153,38 @@ fun main() {
         val monkeyData = input.chunked(7)
 
         val monkeys = listOf(
-            Monkey(
-                items = mutableListOf(79, 98),
+            BigMonkey(
+                items = mutableListOf(BigInteger.valueOf(79), BigInteger.valueOf(98)),
                 operation = { it.times(19) },
                 test = { it.isDivisibleBy(23) },
                 recipientIfTrue = 2,
                 recipientIfFalse = 3,
             ),
-            Monkey(
-                items = mutableListOf(54, 65, 75, 74),
+            BigMonkey(
+                items = mutableListOf(
+                    BigInteger.valueOf(54),
+                    BigInteger.valueOf(65),
+                    BigInteger.valueOf(75),
+                    BigInteger.valueOf(74),
+                ),
                 operation = { it.plus(6) },
                 test = { it.isDivisibleBy(19) },
                 recipientIfTrue = 2,
                 recipientIfFalse = 0,
             ),
-            Monkey(
-                items = mutableListOf(79, 60, 97),
+            BigMonkey(
+                items = mutableListOf(
+                    BigInteger.valueOf(79),
+                    BigInteger.valueOf(60),
+                    BigInteger.valueOf(97),
+                ),
                 operation = { it.squared() },
                 test = { it.isDivisibleBy(13) },
                 recipientIfTrue = 1,
                 recipientIfFalse = 3,
             ),
-            Monkey(
-                items = mutableListOf(74),
+            BigMonkey(
+                items = mutableListOf(BigInteger.valueOf(74)),
                 operation = { it.plus(3) },
                 test = { it.isDivisibleBy(17) },
                 recipientIfTrue = 0,
@@ -184,6 +195,7 @@ fun main() {
 
 
         for (round in 1..1000) {
+            println(round)
             for (monkey in monkeys) {
                 for (item in monkey.items) {
                     val worry = monkey.operation(item)
@@ -231,6 +243,15 @@ data class Monkey(
     var inspections: Int = 0,
 )
 
+data class BigMonkey(
+    val items: MutableList<BigInteger>,
+    val operation: (old: BigInteger) -> BigInteger,
+    val test: (BigInteger) -> Boolean,
+    val recipientIfTrue: Int,
+    val recipientIfFalse: Int,
+    var inspections: Int = 0,
+)
+
 
 fun Int.squared() = this * this
 
@@ -239,4 +260,12 @@ fun Int.isDivisibleBy(int: Int) = this % int == 0
 fun Long.squared() = this * this
 
 fun Long.isDivisibleBy(long: Long) = this % long == 0L
+
+fun BigInteger.times(long: Long): BigInteger = this.multiply(BigInteger.valueOf(long))
+
+fun BigInteger.isDivisibleBy(long: Long) = this.mod(BigInteger.valueOf(long)) == BigInteger.valueOf(0)
+
+fun BigInteger.plus(long: Long) = this.plus(BigInteger.valueOf(long))
+
+fun BigInteger.squared(): BigInteger = this.multiply(this)
 
